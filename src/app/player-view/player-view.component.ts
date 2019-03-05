@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-player-view',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlayerViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private socket: Socket) { }
 
   ngOnInit() {
+  }
+
+  onBuzzerClick(a) {
+    console.log(a.target);
+
+    a.target.classList.add('active');
+    this.socket.emit('push');
+    setTimeout(() => {a.target.classList.remove('active'); }, 200);
+
   }
 
 }

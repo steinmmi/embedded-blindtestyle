@@ -1,0 +1,24 @@
+.container {
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: black;
+    justify-content: center;
+
+    > * {
+        height: 50%;
+        max-height: 50%;
+    }
+    .buzzer {
+        img {
+            display: block;
+            margin: auto;
+            height: 100%;
+
+            &.active {
+                transform: scale(0.9)
+            }
+        }
+    }
+}
