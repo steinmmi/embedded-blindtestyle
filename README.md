@@ -20,6 +20,4 @@ While players uses their phones :
 
 I can't guarantee that this project will be someday finished, neither can I guarantee I will document all of it
 
-Feel free to use this code, but you might need to create your own server to make it work
-> <!> I may add the server-side to Github in the future
-
+Feel free to use this code, but keep in mind that this is a personnal project that may not be easy to use for someone other than myself.
