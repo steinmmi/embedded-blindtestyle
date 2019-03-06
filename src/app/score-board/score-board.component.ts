@@ -31,7 +31,7 @@ export class ScoreBoardComponent implements OnInit {
       {name: "JohnnyYesPapa", score: 25},
     ]
     this.players.sort(function(a, b){
-      return a['score']-b['score']
+      return b['score']-a['score']
     })
     let colors = ['red','blue','green','purple','gold','orange']
     this.players.map((el) => {
