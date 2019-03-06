@@ -7,10 +7,12 @@
     justify-content: center;
 
     .players {
-        height: 70%
+        height: 70%;
+        overflow: scroll;
     }
     .buzzer-container {        
         height: 30%;
+        margin: 20px;
         .buzzer {
             border-radius: 50%;
             margin: auto;
