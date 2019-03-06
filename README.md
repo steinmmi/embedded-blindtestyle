@@ -1,27 +1,25 @@
 # EmbeddedBlindtestyle
 
+This project is an embedded version of _'Blindtestyle'_, a blindtest web game I am currently developping.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.6.
 
-## Development server
+## Purpose
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This project has a fun-purpose only. I won't use it in a commercial way.
 
-## Code scaffolding
+The main goal of this project is to create a client/server within a raspberry PI to play a Blindtest game while at home or at a party.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+A TV screen must be used :
+- To show leaderborad
+- Play desired music
 
-## Build
+While players uses their phones :
+- To show leaderborad
+- Ask for control (Answer by oral)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+I can't guarantee that this project will be someday finished, neither can I guarantee I will document all of it
 
-## Running unit tests
+Feel free to use this code, but you might need to create your own server to make it work
+> <!> I may add the server-side to Github in the future
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
