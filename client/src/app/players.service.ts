@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Player } from './player';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayersService {
 
-
-  playerLoginData = this.socket.fromEvent('login_data');
   players: Array<Player> = [];
-  player: Player;
+  player: Subject<Player>;
   constructor(private socket: Socket) {
 
 
-    this.socket.fromEvent('login_data').subscribe(doc => {
-      this.player = doc['player'];
-      for (const p of doc['players']) {
+    this.socket.fromEvent('user_list').subscribe((doc: Array<Player>) => {
+      for (const p of doc) {
         this.players.push(p);
       }
     });
@@ -39,6 +37,10 @@ export class PlayersService {
 
   getPlayers() {
     return this.players;
+  }
+
+  getPlayer() {
+    return this.player;
   }
 
   findByName({name}) {
