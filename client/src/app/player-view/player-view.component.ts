@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { PlayersService } from '../players.service';
 
 @Component({
   selector: 'app-player-view',
@@ -8,10 +9,17 @@ import { Socket } from 'ngx-socket-io';
 })
 export class PlayerViewComponent implements OnInit {
 
-  constructor(private socket: Socket) { }
+  player: Object;
+  players: Array<Object>;
+
+  constructor(private socket: Socket, private playersService: PlayersService) { }
 
   ngOnInit() {
+    this.socket.fromEvent('login_data').subscribe(doc => {
+      this.player = doc;
+    });
   }
+
 
   onBuzzerClick(a) {
     console.log(a.target);

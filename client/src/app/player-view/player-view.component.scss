@@ -5,7 +5,9 @@
     height: 100%;
     background-color: black;
     justify-content: center;
-
+    .info {
+        color: white;
+    }
     .players {
         height: 70%;
         overflow: scroll;
