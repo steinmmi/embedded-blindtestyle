@@ -6,7 +6,7 @@ import { PhoneGuard } from './phone.guard';
 
 const routes: Routes = [
   {path: '', component: ScreenViewComponent},
-  {path: 'play', component: PlayerViewComponent,canActivate: [PhoneGuard]},
+  {path: 'play', component: PlayerViewComponent, canActivate: [PhoneGuard]},
 ];
 
 @NgModule({

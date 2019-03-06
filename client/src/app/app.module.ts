@@ -8,14 +8,16 @@ import { ScreenViewComponent } from './screen-view/screen-view.component';
 import { PlayerViewComponent } from './player-view/player-view.component';
 import { PhoneGuard } from './phone.guard';
 import { ScoreBoardComponent } from './score-board/score-board.component';
+import { SortPipe } from './sort.pipe';
 
-const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:4201', options: {} };
 @NgModule({
   declarations: [
     AppComponent,
     ScreenViewComponent,
     PlayerViewComponent,
-    ScoreBoardComponent
+    ScoreBoardComponent,
+    SortPipe
   ],
   imports: [
     BrowserModule,
