@@ -2,8 +2,6 @@
 
 This project is an embedded version of _'Blindtestyle'_, a blindtest web game I am currently developping.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.6.
-
 ## Purpose
 
 This project has a fun-purpose only. I won't use it in a commercial way.
