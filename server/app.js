@@ -28,32 +28,35 @@ function findByName({name}) {
 }
 
 io.on("connection", socket => {
-    console.log(('sending data'));
-    let name = names.shift()
-    socket.player = {
-        name: name,
-        score: 0,
-        color: colors.shift()
-    }
-    players.push(socket.player)
-    socket.broadcast.emit('user_logon', socket.player)
-    socket.emit('user_list', players)
-    socket.emit('login_data', socket.player)
-    console.log("Connection");
-    socket.on('disconnect', function () {
-        colors.push(socket.player.color)
-        names.push(socket.player.name)
-        let id = findByName(socket.player, 1)
-        if(id >= 0) players.splice(id, 1)
-        io.emit('user_logout', socket.player)
-    });
-    socket.on('push', () => {
-        players[findByName(socket.player)].score++;
-        io.emit('user_update', {
-            player: socket.player,
-            data: {score: 1}
+    let path = socket.handshake.query.path
+    if(path == "/play") {
+        let name = names.shift()
+        socket.player = {
+            name: name,
+            score: 0,
+            color: colors.shift()
+        }
+        players.push(socket.player)
+        socket.broadcast.emit('user_logon', socket.player)
+    
+        socket.emit('login_data', socket.player)
+        console.log("Connection");
+        socket.on('disconnect', function () {
+            colors.push(socket.player.color)
+            names.push(socket.player.name)
+            let id = findByName(socket.player, 1)
+            if(id >= 0) players.splice(id, 1)
+            io.emit('user_logout', socket.player)
+        });
+        socket.on('push', () => {
+            players[findByName(socket.player)].score++;
+            io.emit('user_update', {
+                player: socket.player,
+                data: {score: 1}
+            })
         })
-    })
+    } else screenSocket = socket
+    socket.emit('user_list', players)
 });
 
 http.listen(4201, "0.0.0.0");
