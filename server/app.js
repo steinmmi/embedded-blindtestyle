@@ -34,7 +34,6 @@ io.on("connection", socket => {
         name: name,
         score: 0,
         color: colors.shift()
-
     }
     players.push(socket.player)
     socket.broadcast.emit('user_logon', socket.player)
@@ -42,8 +41,10 @@ io.on("connection", socket => {
     socket.emit('login_data', socket.player)
     console.log("Connection");
     socket.on('disconnect', function () {
-        console.log(socket.player);
-        
+        colors.push(socket.player.color)
+        names.push(socket.player.name)
+        let id = findByName(socket.player, 1)
+        if(id >= 0) players.splice(id, 1)
         io.emit('user_logout', socket.player)
     });
     socket.on('push', () => {
