@@ -15,7 +15,7 @@ const colors = {
         Magenta: "\x1b[35m",
         Cyan: "\x1b[36m",
         White: "\x1b[37m",
-        Crimson: "\x1b[38m" //القرمزي
+        Crimson: "\x1b[38m"
     },
     bg: {
         Black: "\x1b[40m",
@@ -33,7 +33,8 @@ const colors = {
 const keywords = {
     success: colors.fg.Green,
     error: colors.fg.Red,
-    warn: colors.fg.Yellow
+    warn: colors.fg.Yellow,
+    info: colors.fg.Blue
 }
 
 function formatConsoleDate (date) {
@@ -53,11 +54,24 @@ function formatConsoleDate (date) {
             ']';
 }
 
+function makeMsg(m, keyword) {
+    let message = keywords[keyword] || keywords.success
+    message += formatConsoleDate(new Date) + colors.Reset + " ";
+    message += m ? m : 'Event occured';
+    return message
+}
 module.exports = {
-    print: (m, keyword) => {
-        let message = keywords[keyword] || keywords.success
-        message += formatConsoleDate(new Date) + colors.Reset + " ";
-        message += m ? m : 'Event occured';
-        console.log(message);
+    colors: colors,
+    error: (m) => {
+        console.log(makeMsg(m, 'error'))
+    },
+    print: (m) => {
+        console.log(makeMsg(m))
+    },
+    info: (m) => {
+        console.log(makeMsg(m, 'info'))
+    },
+    warn: (m) => {
+        console.log(makeMsg(m, 'warn'))
     }
 }

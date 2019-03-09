@@ -48,7 +48,7 @@ io.on("connection", socket => {
         socket.broadcast.emit('user_logon', socket.player)
         socket.emit('login_data', socket.player)
         socket.on('disconnect', function () {
-            log.print(`${socket.player.name || socket.handshake.address} disconnected`, 'warn')
+            log.warn(`${socket.player.name || socket.handshake.address} disconnected`)
             colors.push(socket.player.color)
             names.push(socket.player.name)
             let id = findByName(socket.player, 1)
@@ -56,7 +56,7 @@ io.on("connection", socket => {
             io.emit('user_logout', socket.player)
         });
         socket.on('push', () => {
-            log.print(`${socket.player.name} pushed the button`, 'warn')
+            log.info(`${log.colors.Bright}${socket.player.name}${log.colors.Reset} pushed the button`)
             players[findByName(socket.player)].score++;
             io.emit('user_update', {
                 player: socket.player,
