@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { PlayersService } from '../players.service';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-player-view',
@@ -12,10 +12,11 @@ export class PlayerViewComponent implements OnInit {
   player: Object;
   players: Array<Object>;
 
-  constructor(private socket: Socket, private playersService: PlayersService) { }
+  constructor(private socket: Socket, private socketService: SocketService) { }
 
   ngOnInit() {
-    this.socket.fromEvent('login_data').subscribe(doc => {
+
+    this.socketService.getConnectionInfo().subscribe(doc => {
       this.player = doc;
     });
   }

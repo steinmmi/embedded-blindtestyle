@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PlayersService {
+export class SocketService {
 
   players: Array<Player> = [];
   player: Subject<Player>;
@@ -41,6 +41,10 @@ export class PlayersService {
 
   getPlayer() {
     return this.player;
+  }
+
+  getConnectionInfo() {
+    return this.socket.fromEvent('login_data');
   }
 
   findByName({name}) {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PlayersService } from '../players.service';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-score-board',
@@ -8,12 +8,12 @@ import { PlayersService } from '../players.service';
 })
 export class ScoreBoardComponent implements OnInit {
 
-  constructor(private playersService: PlayersService) { }
+  constructor(private socketService: SocketService) { }
   players: Array<Object>;
 
   ngOnInit() {
 
-    this.players = this.playersService.getPlayers();
+    this.players = this.socketService.getPlayers();
   }
 
 }
