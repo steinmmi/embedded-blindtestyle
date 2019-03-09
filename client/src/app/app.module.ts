@@ -9,8 +9,9 @@ import { PlayerViewComponent } from './player-view/player-view.component';
 import { PhoneGuard } from './phone.guard';
 import { ScoreBoardComponent } from './score-board/score-board.component';
 import { SortPipe } from './sort.pipe';
+import configFile from '../assets/config.json';
 
-const config: SocketIoConfig = { url: 'http://localhost:4200', options: {query: `path=${window.location.pathname}`} };
+const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${window.location.pathname}`} };
 @NgModule({
   declarations: [
     AppComponent,
