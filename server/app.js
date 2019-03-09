@@ -42,13 +42,13 @@ io.on("connection", socket => {
             score: 0,
             color: colors.shift()
         }
-        log.print(`${socket.handshake.address} is now ${socket.player.name}`)
+        log.print(`${socket.handshake.address} is now ${log.colors.Bright + socket.player.name + log.colors.Reset}`)
         players.push(socket.player)
 
         socket.broadcast.emit('user_logon', socket.player)
         socket.emit('login_data', socket.player)
         socket.on('disconnect', function () {
-            log.warn(`${socket.player.name || socket.handshake.address} disconnected`)
+            log.warn(`${log.colors.Bright + ( socket.player.name || socket.handshake.address) + log.colors.Reset} disconnected`)
             colors.push(socket.player.color)
             names.push(socket.player.name)
             let id = findByName(socket.player, 1)
@@ -56,11 +56,11 @@ io.on("connection", socket => {
             io.emit('user_logout', socket.player)
         });
         socket.on('push', () => {
-            log.info(`${log.colors.Bright}${socket.player.name}${log.colors.Reset} pushed the button`)
+            log.info(`${log.colors.Bright + socket.player.name + log.colors.Reset} pushed the button`)
             players[findByName(socket.player)].score++;
             io.emit('user_update', {
-                player: socket.player,
-                data: {score: 1}
+            player: socket.player,
+            data: {score: 1}
             })
         })
     } else screenSocket = socket
@@ -73,3 +73,4 @@ if (error) {
     return 0
 }
 http.listen(4201, "0.0.0.0");
+log.print('Server is now active');
