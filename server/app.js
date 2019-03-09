@@ -2,17 +2,21 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const log = require('./modules/log');
-
+error = false
 let names = [
+    'Ornithorynque rassasié',
     'Bison futé',
     'Canard content',
     'Chiot timide',
     'Aigle furieux',
 ]
-
+let colors = ['red','blue','green','purple','orange']
 let players = []
 
-let colors = ['red','blue','green','purple','gold','orange']
+if(!(colors.length === names.length)) {  // ! Basic test
+    log.print('colors and names are not the same size', 'error')
+    error = true;
+}
 
 function findByName({name}) {
     let i = 0;
@@ -63,4 +67,9 @@ io.on("connection", socket => {
     socket.emit('user_list', players)
 });
 
+
+if (error) {
+    log.print('An error occured, aborting...', 'error')
+    return 0
+}
 http.listen(4201, "0.0.0.0");
