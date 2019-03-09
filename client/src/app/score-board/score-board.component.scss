@@ -2,9 +2,11 @@
     color: white;
     display: flex;
     flex-direction: column;
-
-    .player > * {
-        margin: 5px 10px;
-        display: inline-block;
+    .player {
+        margin: 5px 0;
+        & > * {
+            margin: 5px 10px;
+            display: inline-block;
+        }
     }
 }
