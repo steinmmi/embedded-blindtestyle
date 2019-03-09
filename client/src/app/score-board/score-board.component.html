@@ -1,8 +1,8 @@
 <div class="container">
   <div class="player" *ngFor="let player of players | sort:'score' ; let i = index"  [ngStyle]="{'background-color': player.color, 'box-shadow': '0px 0px 10px '+player.color}">
     <span>{{i+1}}</span>
-    <h4>{{player.name}}</h4>
-    <p>{{player.score}}</p>
-    <span *ngIf="i===0">👑</span>
+      <h4>{{player.name}}</h4>
+      <p>{{player.score}}</p>
+      <span *ngIf="i===0">👑</span>
   </div>
 </div>
