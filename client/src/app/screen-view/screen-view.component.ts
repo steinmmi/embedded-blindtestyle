@@ -39,9 +39,16 @@ export class ScreenViewComponent implements OnInit {
     });
 
   }
+  nextMusic() {
 
-  test() {
-    console.log('Ca marche');
+  }
+
+  eventHandler(event) {
+    switch (event) {
+      case 'nextMusic':
+        this.nextMusic();
+        break;
+    }
   }
 
 }
