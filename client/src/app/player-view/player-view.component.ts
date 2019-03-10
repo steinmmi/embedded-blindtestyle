@@ -20,11 +20,10 @@ export class PlayerViewComponent implements OnInit {
       this.player = doc;
     });
   }
-
-
+  goFullscreen() {
+    document.querySelector('body').requestFullscreen();
+  }
   onBuzzerClick(a) {
-    console.log(a.target);
-
     a.target.classList.add('active');
     this.socket.emit('push');
     setTimeout(() => {a.target.classList.remove('active'); }, 200);
