@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-music-player',
@@ -6,20 +7,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./music-player.component.scss']
 })
 export class MusicPlayerComponent implements OnInit {
-
-
+  @Output() playerEvent = new EventEmitter();
   playing: boolean;
-  constructor() { }
+  constructor(private socketService: SocketService) { }
   audio: HTMLAudioElement;
   ngOnInit() {
-    this.createAudio();
+    this.createAudio('/assets/music.mp3');
   }
 
-  createAudio() {
-    this.audio = new Audio();
-    this.audio.src = '/assets/music.mp3';
+  createAudio(src) {
+    if (!this.audio) {
+      this.audio = new Audio();
+    }
+    this.audio.src = src;
   }
 
+  fadeOut() {
+    const fadeAudio = setInterval(() => {
+      if (this.audio.volume > 0.0) {
+        this.audio.volume -= 0.1;
+      }
+      if (this.audio.volume <= 0.1) {
+          this.audio.pause();
+          this.playerEvent.emit('nextMusic');
+          clearInterval(fadeAudio);
+      }
+  }, 200);
+  }
   playAudio() {
     const playPromise = this.audio.play();
     if (playPromise !== undefined) {

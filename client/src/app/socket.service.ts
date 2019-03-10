@@ -47,6 +47,14 @@ export class SocketService {
     return this.socket.fromEvent('login_data');
   }
 
+  getUserUpdate() {
+    return this.socket.fromEvent('user_update');
+  }
+
+  waitForAnswer() {
+    return this.socket.fromEvent('answer');
+  }
+
   findByName({name}) {
     let i = 0;
     let find = false;

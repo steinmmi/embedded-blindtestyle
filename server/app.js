@@ -58,6 +58,13 @@ io.on("connection", socket => {
         socket.on('push', () => {
             log.info(`${log.colors.Bright + socket.player.name + log.colors.Reset} pushed the button`)
             players[findByName(socket.player)].score++;
+            
+            setTimeout(() => {
+                io.emit('answer', {
+                    correct: true
+                });
+            }, 5000)
+            
             io.emit('user_update', {
             player: socket.player,
             data: {score: 1}

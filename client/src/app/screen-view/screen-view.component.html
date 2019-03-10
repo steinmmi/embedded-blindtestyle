@@ -6,7 +6,7 @@
         </div>
         <div class="music">
             <h1 *ngIf='currentPlayer'>C'est au tour de <em>{{currentPlayer.name}}</em></h1>
-        <!--<app-music-player></app-music-player>-->
+        <app-music-player (playerEvent)="test($event)"></app-music-player>
     </div>
     </div>
 </div>
