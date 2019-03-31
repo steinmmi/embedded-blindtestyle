@@ -70,7 +70,14 @@ io.on("connection", socket => {
             data: {score: 1}
             })
         })
-    } else screenSocket = socket
+    } else {
+        log.print('COUCOU')
+        socket.on('music:next', () => {
+            let nb = Math.ceil(Math.random() * 5)
+            socket.emit('music:next', nb)
+        })
+        screenSocket = socket
+    }
     socket.emit('user_list', players)
 });
 

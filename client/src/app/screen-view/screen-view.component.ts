@@ -18,7 +18,18 @@ export class ScreenViewComponent implements OnInit {
   ngOnInit() {
     this.socketService.getUserUpdate().subscribe(doc => {
       this.currentPlayer = doc['player'];
-      this.mplayer.audio.pause();
+      this.mplayer.fadeOut(0.5).then(() => {
+        this.mplayer.audio.pause();
+      });
+    });
+
+    this.socketService.nextMusicSignal().subscribe(val => {
+      console.log(val);
+      this.mplayer.audio.src = `/assets/music${val}.mp3`;
+      setTimeout(() => {
+        this.mplayer.fadeIn();
+      this.mplayer.playAudio();
+      }, 1000);
     });
 
     setTimeout(() => {
@@ -30,25 +41,17 @@ export class ScreenViewComponent implements OnInit {
       const answerAudio =  new Audio();
       answerAudio.src = data['correct'] ? '/assets/right_answer.mp3' : '/assets/wrong_answer.mp3';
       answerAudio.play();
+      this.mplayer.fadeIn(1)
       this.mplayer.audio.play();
       if (data['correct']) {
         setTimeout(() => {
-          this.mplayer.fadeOut();
+          this.mplayer.fadeOut().then(() => {
+            this.socketService.nextMusic();
+          });
         }, 10000);
       }
     });
 
-  }
-  nextMusic() {
-
-  }
-
-  eventHandler(event) {
-    switch (event) {
-      case 'nextMusic':
-        this.nextMusic();
-        break;
-    }
   }
 
 }

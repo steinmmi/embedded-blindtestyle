@@ -12,7 +12,7 @@ export class MusicPlayerComponent implements OnInit {
   constructor(private socketService: SocketService) { }
   audio: HTMLAudioElement;
   ngOnInit() {
-    this.createAudio('/assets/music.mp3');
+    this.createAudio('/assets/music1.mp3');
   }
 
   createAudio(src) {
@@ -22,18 +22,35 @@ export class MusicPlayerComponent implements OnInit {
     this.audio.src = src;
   }
 
-  fadeOut() {
-    const fadeAudio = setInterval(() => {
+  fadeOut(time = 2) {
+    return new Promise((resolve, reject) => {
+      const fadeAudio = setInterval(() => {
       if (this.audio.volume > 0.0) {
         this.audio.volume -= 0.1;
       }
       if (this.audio.volume <= 0.1) {
           this.audio.pause();
-          this.playerEvent.emit('nextMusic');
           clearInterval(fadeAudio);
+          resolve();
       }
-  }, 200);
+    }, time * 0.1 * 1000);
+  });
   }
+
+  fadeIn(time = 2) {
+    return new Promise((resolve, reject) => {
+      const fadeAudio = setInterval(() => {
+      if (this.audio.volume < 1) {
+        this.audio.volume += 0.1;
+      }
+      if (this.audio.volume >= 0.9) {
+          clearInterval(fadeAudio);
+          resolve();
+      }
+    }, time * 0.1 * 1000);
+  });
+  }
+
   playAudio() {
     const playPromise = this.audio.play();
     if (playPromise !== undefined) {

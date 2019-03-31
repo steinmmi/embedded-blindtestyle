@@ -55,6 +55,13 @@ export class SocketService {
     return this.socket.fromEvent('answer');
   }
 
+  nextMusic() {
+    this.socket.emit('music:next');
+  }
+  nextMusicSignal() {
+    return this.socket.fromEvent('music:next')
+  }
+
   findByName({name}) {
     let i = 0;
     let find = false;
