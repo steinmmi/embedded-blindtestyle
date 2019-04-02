@@ -1,0 +1,31 @@
+<div class="container">
+  <h1>hi welcome to chili's</h1>
+  <div class="form">
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input type="text" class="form-group" name="title" id="title" required [(ngModel)]="music.title">
+    </div>
+    <div class="form-group">
+      <label for="artist">Artiste</label>
+      <input type="text" name="artist" id="artist" required [(ngModel)]="music.artist">
+    </div>
+    <div class="form-group">
+      <label for="type">Type de la musique</label>
+      <select name="type" id="type" [(ngModel)]="music.type">
+        <option *ngFor="let type of types" [value]="type" >{{type}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="year">Année de sortie</label>
+      <input type="number" name="year" id="year" required [(ngModel)]="music.year">
+    </div>
+    <div class="form-group">
+      <label for="song">Fichier de la musique</label>
+      <input type="file" name="song" id="song" (change)="onFileChange($event)">
+    </div>
+
+    <div class="form-group">
+      <input type="submit" value="Ajouter" (click)='add()'>
+    </div>
+  </div>
+</div>
