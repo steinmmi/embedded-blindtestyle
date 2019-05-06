@@ -10,7 +10,7 @@ export class PhoneGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       let isPhone = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent);
-      if(!isPhone) {
+      if(!isPhone && false) { // TODO: Remove false in production
         alert('Accessible sur téléphone uniquement.');
         return false;
       }
