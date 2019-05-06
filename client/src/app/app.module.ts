@@ -14,6 +14,7 @@ import configFile from '../assets/config.json';
 import { MusicPlayerComponent } from './music-player/music-player.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { NewMusicComponent } from './config/components/new-music/new-music.component';
+import { LandingComponent } from './landing/landing.component';
 
 const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${window.location.pathname}`} };
 @NgModule({
@@ -26,6 +27,7 @@ const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${w
     MusicPlayerComponent,
     SplashScreenComponent,
     NewMusicComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule,
