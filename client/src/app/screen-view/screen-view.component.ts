@@ -3,6 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { Player } from '../player';
 import { SocketService } from '../socket.service';
 import { MusicPlayerComponent } from '../music-player/music-player.component';
+import { SplashScreenComponent } from '../splash-screen/splash-screen.component';
 
 @Component({
   selector: 'app-screen-view',
@@ -11,6 +12,7 @@ import { MusicPlayerComponent } from '../music-player/music-player.component';
 })
 export class ScreenViewComponent implements OnInit {
   @ViewChild(MusicPlayerComponent) mplayer: MusicPlayerComponent;
+  @ViewChild(SplashScreenComponent) splashscreen: SplashScreenComponent;
   color: string;
   currentPlayer: Player;
   constructor(private socketService: SocketService) { }
@@ -43,9 +45,10 @@ export class ScreenViewComponent implements OnInit {
       answerAudio.play();
       this.mplayer.fadeIn(1)
       this.mplayer.audio.play();
-      if (data['correct']) {
+      this.splashscreen.appear(data['correct'])
+      if (data) {
         setTimeout(() => {
-          this.mplayer.fadeOut().then(() => {
+          this.mplayer.fadeOut(2).then(() => {
             this.socketService.nextMusic();
           });
         }, 10000);
