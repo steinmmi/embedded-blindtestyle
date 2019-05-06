@@ -71,9 +71,9 @@ io.on("connection", socket => {
             })
         })
     } else {
-        log.print('COUCOU')
         socket.on('music:next', () => {
             let nb = Math.ceil(Math.random() * 5)
+            log.info('Playing music number '+ nb)
             socket.emit('music:next', nb)
         })
         screenSocket = socket

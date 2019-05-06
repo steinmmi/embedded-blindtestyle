@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
@@ -12,6 +13,7 @@ import { SortPipe } from './sort.pipe';
 import configFile from '../assets/config.json';
 import { MusicPlayerComponent } from './music-player/music-player.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
+import { NewMusicComponent } from './config/components/new-music/new-music.component';
 
 const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${window.location.pathname}`} };
 @NgModule({
@@ -22,13 +24,15 @@ const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${w
     ScoreBoardComponent,
     SortPipe,
     MusicPlayerComponent,
-    SplashScreenComponent
+    SplashScreenComponent,
+    NewMusicComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SocketIoModule.forRoot(config),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule
   ],
   providers: [PhoneGuard],
   bootstrap: [AppComponent]
