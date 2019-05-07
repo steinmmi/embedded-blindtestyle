@@ -12,7 +12,8 @@ let names = [
 ]
 let colors = ['red','blue','green','purple','orange']
 let players = []
-
+let gm;
+let actualPlayer;
 if(!(colors.length === names.length)) {  // ! Basic test
     log.print('colors and names are not the same size', 'error')
     error = true;
@@ -34,16 +35,22 @@ function findByName({name}) {
 io.on("connection", socket => {
     let path = socket.handshake.query.path;
     log.print(`${socket.handshake.address} connected | path : ${path}`);
-    if(path == "/play" || path == '/gm') {
+    if(path == "/play" || path == "/gm") {
         let name = names.shift()
         socket.player = {
             name: name,
             score: 0,
-            color: colors.shift()
+            color: colors.shift(),
+            id: socket.id
         }
+        
+        
         log.print(`${socket.handshake.address} is now ${log.colors.Bright + socket.player.name + log.colors.Reset}`)
+        if(players.length === 0) {
+            log.print(`${log.colors.Bright + socket.player.name + log.colors.Reset} is the new Game Master`)
+            gm = socket.player;
+        }
         players.push(socket.player)
-
         socket.broadcast.emit('user_logon', socket.player)
         socket.emit('login_data', socket.player)
         socket.on('disconnect', function () {
@@ -56,22 +63,38 @@ io.on("connection", socket => {
         }).on('push', () => {
             log.info(`${log.colors.Bright + socket.player.name + log.colors.Reset} pushed the button`)
             players[findByName(socket.player)].score++;
-            io.emit('user_update', {
-            player: socket.player,
-            data: {score: 1}
-            })
+            actualPlayer = socket.player;
         }).on('isGoodAnswer', (state) => {
-            io.emit('answer', {
-                correct: state
-            });
-        })
+            if(actualPlayer) {
+                if(state) {
+                    io.emit('user_update', {
+                        player: actualPlayer,
+                        data: {score: 1}
+                    });
+                    let newGm;
+                    players.forEach((player, id) => {
+                        if(gm.name === player.name) {
+                            newGm = id+1 < players.length ? players[id+1] : players[0];
+                            io.sockets.connected[newGm.id].emit('change:turn', true);
+                            log.print(`${log.colors.Bright + newGm.name + log.colors.Reset} is the new Game Master`)
+                        }
+                        if(newGm !== player) io.sockets.connected[player.id].emit('change:turn', false);
+                    });
+                    gm = newGm;
+                }
+                io.emit('answer', {
+                    correct: state
+                });
+                actualPlayer = null;
+            }
+        });
     } else {
         socket.on('music:next', () => {
             let nb = Math.ceil(Math.random() * 5)
             log.info('Playing music number '+ nb)
             socket.emit('music:next', nb)
         })
-        screenSocket = socket
+        screenSocket = socket;
     }
     socket.emit('user_list', players)
 });

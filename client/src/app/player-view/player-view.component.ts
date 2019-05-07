@@ -16,9 +16,12 @@ export class PlayerViewComponent implements OnInit {
 
   ngOnInit() {
 
-    this.socketService.getConnectionInfo().subscribe(doc => {
-      this.player = doc;
-    });
+    
+    this.socketService.getPlayer().subscribe(val => {
+        this.player = val;
+    })
+    
+    
   }
   goFullscreen() {
     document.querySelector('body').requestFullscreen();

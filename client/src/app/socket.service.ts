@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Player } from './player';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,13 @@ import { Subject } from 'rxjs';
 export class SocketService {
 
   players: Array<Player> = [];
-  player: Subject<Player>;
-  constructor(private socket: Socket) {
+  player: BehaviorSubject<Player> = new BehaviorSubject<Player>(null);
+  constructor(private socket: Socket, private router: Router) {
 
-
+    this.socket.fromEvent('change:turn').subscribe((link) => {
+        if(link) this.router.navigate(['/gm']);
+        else this.router.navigate(['/play']);
+    })
     this.socket.fromEvent('user_list').subscribe((doc: Array<Player>) => {
       for (const p of doc) {
         this.players.push(p);
@@ -21,7 +25,6 @@ export class SocketService {
 
     this.socket.fromEvent('user_logon').subscribe((doc: Player) => {
       this.players.push(doc);
-      console.log(this.player, this.players);
     });
 
     this.socket.fromEvent('user_logout').subscribe((doc: Player) => {
@@ -33,6 +36,10 @@ export class SocketService {
       const id = this.findByName(doc['player']);
       this.players[id].score += doc['data']['score'];
     });
+
+    this.socket.fromEvent('login_data').subscribe((data:Player) => {
+        this.player.next(data);
+    })
   }
 
   getPlayers() {

@@ -26,7 +26,6 @@ export class ScreenViewComponent implements OnInit {
     });
 
     this.socketService.nextMusicSignal().subscribe(val => {
-      console.log(val);
       this.mplayer.audio.src = `/assets/music${val}.mp3`;
       setTimeout(() => {
         this.mplayer.fadeIn();
