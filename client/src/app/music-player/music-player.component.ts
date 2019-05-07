@@ -22,32 +22,32 @@ export class MusicPlayerComponent implements OnInit {
     this.audio.src = src;
   }
 
-  fadeOut(time = 2) {
+  fadeOut(time = 20) {
     return new Promise((resolve, reject) => {
       const fadeAudio = setInterval(() => {
-      if (this.audio.volume > 0.0) {
-        this.audio.volume -= 0.1;
+      if (this.audio.volume > 0.1) {
+            this.audio.volume -= 0.1;
       }
       if (this.audio.volume <= 0.1) {
           this.audio.pause();
           clearInterval(fadeAudio);
           resolve();
       }
-    }, time * 0.1 * 1000);
+    }, time * 0.100);
   });
   }
 
-  fadeIn(time = 2) {
+  fadeIn(time = 20) {
     return new Promise((resolve, reject) => {
       const fadeAudio = setInterval(() => {
       if (this.audio.volume < 1) {
-        this.audio.volume += 0.1;
+            this.audio.volume += 0.1;
       }
       if (this.audio.volume >= 0.9) {
           clearInterval(fadeAudio);
           resolve();
       }
-    }, time * 0.1 * 1000);
+    }, time * 0.100);
   });
   }
 

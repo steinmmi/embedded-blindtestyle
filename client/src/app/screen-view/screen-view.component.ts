@@ -18,9 +18,9 @@ export class ScreenViewComponent implements OnInit {
   constructor(private socketService: SocketService) { }
 
   ngOnInit() {
-    this.socketService.getUserUpdate().subscribe(doc => {
-      this.currentPlayer = doc['player'];
-      this.mplayer.fadeOut(0.5).then(() => {
+    this.socketService.hasPushed().subscribe((player: Player) => {
+      this.currentPlayer = player;
+      this.mplayer.fadeOut().then(() => {
         this.mplayer.audio.pause();
       });
     });
@@ -42,12 +42,13 @@ export class ScreenViewComponent implements OnInit {
       const answerAudio =  new Audio();
       answerAudio.src = data['correct'] ? '/assets/right_answer.mp3' : '/assets/wrong_answer.mp3';
       answerAudio.play();
-      this.mplayer.fadeIn(1)
+      this.mplayer.fadeIn();
+      
       this.mplayer.audio.play();
       this.splashscreen.appear(data['correct'])
       if (data) {
         setTimeout(() => {
-          this.mplayer.fadeOut(2).then(() => {
+          this.mplayer.fadeOut().then(() => {
             this.socketService.nextMusic();
           });
         }, 10000);

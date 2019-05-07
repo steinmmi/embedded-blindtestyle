@@ -58,6 +58,10 @@ export class SocketService {
     return this.socket.fromEvent('user_update');
   }
 
+  hasPushed() {
+      return this.socket.fromEvent('pushed');
+  }
+
   waitForAnswer() {
     return this.socket.fromEvent('answer');
   }

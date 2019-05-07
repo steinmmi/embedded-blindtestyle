@@ -13,6 +13,7 @@ let names = [
 let colors = ['red','blue','green','purple','orange']
 let players = []
 let gm;
+let canAnswer = true;
 let actualPlayer;
 if(!(colors.length === names.length)) {  // ! Basic test
     log.print('colors and names are not the same size', 'error')
@@ -44,7 +45,6 @@ io.on("connection", socket => {
             id: socket.id
         }
         
-        
         log.print(`${socket.handshake.address} is now ${log.colors.Bright + socket.player.name + log.colors.Reset}`)
         if(players.length === 0) {
             log.print(`${log.colors.Bright + socket.player.name + log.colors.Reset} is the new Game Master`)
@@ -53,6 +53,8 @@ io.on("connection", socket => {
         players.push(socket.player)
         socket.broadcast.emit('user_logon', socket.player)
         socket.emit('login_data', socket.player)
+        
+        
         socket.on('disconnect', function () {
             log.warn(`${log.colors.Bright + ( socket.player.name || socket.handshake.address) + log.colors.Reset} disconnected`)
             colors.push(socket.player.color)
@@ -61,9 +63,11 @@ io.on("connection", socket => {
             if(id >= 0) players.splice(id, 1)
             io.emit('user_logout', socket.player)
         }).on('push', () => {
+            if(actualPlayer || !canAnswer) {
+                return;}
             log.info(`${log.colors.Bright + socket.player.name + log.colors.Reset} pushed the button`)
-            players[findByName(socket.player)].score++;
             actualPlayer = socket.player;
+            io.emit('pushed', socket.player);
         }).on('isGoodAnswer', (state) => {
             if(actualPlayer) {
                 if(state) {
@@ -71,6 +75,7 @@ io.on("connection", socket => {
                         player: actualPlayer,
                         data: {score: 1}
                     });
+                    players[findByName(actualPlayer)].score++;
                     let newGm;
                     players.forEach((player, id) => {
                         if(gm.name === player.name) {
@@ -81,6 +86,7 @@ io.on("connection", socket => {
                         if(newGm !== player) io.sockets.connected[player.id].emit('change:turn', false);
                     });
                     gm = newGm;
+                    canAnswer = false;
                 }
                 io.emit('answer', {
                     correct: state
@@ -93,6 +99,7 @@ io.on("connection", socket => {
             let nb = Math.ceil(Math.random() * 5)
             log.info('Playing music number '+ nb)
             socket.emit('music:next', nb)
+            canAnswer = true;
         })
         screenSocket = socket;
     }
