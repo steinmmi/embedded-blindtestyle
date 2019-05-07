@@ -32,10 +32,9 @@ function findByName({name}) {
 }
 
 io.on("connection", socket => {
-    let path = socket.handshake.query.path
+    let path = socket.handshake.query.path;
     log.print(`${socket.handshake.address} connected | path : ${path}`);
-    if(path == "/play") {
-        
+    if(path == "/play" || path == '/gm') {
         let name = names.shift()
         socket.player = {
             name: name,
@@ -54,21 +53,17 @@ io.on("connection", socket => {
             let id = findByName(socket.player, 1)
             if(id >= 0) players.splice(id, 1)
             io.emit('user_logout', socket.player)
-        });
-        socket.on('push', () => {
+        }).on('push', () => {
             log.info(`${log.colors.Bright + socket.player.name + log.colors.Reset} pushed the button`)
             players[findByName(socket.player)].score++;
-            
-            setTimeout(() => {
-                io.emit('answer', {
-                    correct: true
-                });
-            }, 5000)
-            
             io.emit('user_update', {
             player: socket.player,
             data: {score: 1}
             })
+        }).on('isGoodAnswer', (state) => {
+            io.emit('answer', {
+                correct: state
+            });
         })
     } else {
         socket.on('music:next', () => {

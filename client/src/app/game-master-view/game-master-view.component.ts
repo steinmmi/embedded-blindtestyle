@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SocketService } from '../socket.service';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-game-master-view',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameMasterViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private socket: Socket) { }
 
   ngOnInit() {
+      
   }
 
+  send(state) {
+    this.socket.emit('isGoodAnswer', state);
+  }
 }

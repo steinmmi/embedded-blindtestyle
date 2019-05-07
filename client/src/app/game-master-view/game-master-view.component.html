@@ -6,10 +6,10 @@
     <h2>Aurelson</h2>
   </div>
   <div class="choices">
-    <div class="good" (click)='send()'>
+    <div class="good" (click)='send(true)'>
         <img src="/assets/img/white-check.png" alt="cross">
     </div>
-    <div class="bad">
+    <div class="bad" (click)='send(false)'>
         <img src="/assets/img/white-cross.png" alt="cross">
     </div>
   </div>
