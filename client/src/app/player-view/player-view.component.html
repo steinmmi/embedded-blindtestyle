@@ -1,10 +1,11 @@
 <div class="container">
-  <img class="fullscreen" (click)="goFullscreen()" width="30" height="30" src="/assets/fullscreen.png">
+  <img class="fullscreen" (click)="goFullscreen()" width="30" height="30" src="/assets/img/fullscreen.png">
   <h1 class="name">{{ player?.name}}</h1>
 
   <div class="players">
     <app-score-board></app-score-board>
   </div>
+  <a [routerLink]="['/gm']">dsqdqs</a>
   <div class="buzzer-container">
     <div class="buzzer" [ngStyle]="{'background-color': player?.color}" (mousedown)="onBuzzerClick($event)"></div>
   </div>

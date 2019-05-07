@@ -1,13 +1,16 @@
 <div class="container">
+    <h1>Vous êtes le maitre du jeu</h1>
   <app-score-board></app-score-board>
   <div class="info">
     <h1>Les réjouissances sont terminées</h1>
     <h2>Aurelson</h2>
   </div>
   <div class="choices">
-    <div class="good">
+    <div class="good" (click)='send()'>
+        <img src="/assets/img/white-check.png" alt="cross">
     </div>
     <div class="bad">
+        <img src="/assets/img/white-cross.png" alt="cross">
     </div>
   </div>
 </div>

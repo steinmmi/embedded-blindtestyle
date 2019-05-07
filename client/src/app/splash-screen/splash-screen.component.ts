@@ -21,8 +21,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class SplashScreenComponent implements OnInit {
   src: string;
 
-  falseSrc = "/assets/cross.png";
-  trueSrc = "/assets/check.png";
+  falseSrc = "/assets/img/cross.png";
+  trueSrc = "/assets/img/check.png";
   constructor() { }
   currentState = 'hidden';
 
