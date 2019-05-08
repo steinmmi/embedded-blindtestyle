@@ -22,22 +22,23 @@ export class MusicPlayerComponent implements OnInit {
     this.audio.src = src;
   }
 
-  fadeOut(time = 20) {
+  fadeOut(time = 1) {
     return new Promise((resolve, reject) => {
       const fadeAudio = setInterval(() => {
       if (this.audio.volume > 0.1) {
             this.audio.volume -= 0.1;
-      }
-      if (this.audio.volume <= 0.1) {
+      } else if (this.audio.volume > 0.01) {
+        this.audio.volume -= 0.01;
+      } else {
           this.audio.pause();
           clearInterval(fadeAudio);
           resolve();
       }
-    }, time * 0.100);
+      }, time * 100);
   });
   }
 
-  fadeIn(time = 20) {
+  fadeIn(time = 1) {
     return new Promise((resolve, reject) => {
       const fadeAudio = setInterval(() => {
       if (this.audio.volume < 1) {
@@ -47,7 +48,7 @@ export class MusicPlayerComponent implements OnInit {
           clearInterval(fadeAudio);
           resolve();
       }
-    }, time * 0.100);
+      }, time * 100);
   });
   }
 

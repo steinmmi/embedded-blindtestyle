@@ -20,7 +20,7 @@ export class ScreenViewComponent implements OnInit {
   ngOnInit() {
     this.socketService.hasPushed().subscribe((player: Player) => {
       this.currentPlayer = player;
-      this.mplayer.fadeOut().then(() => {
+      this.mplayer.fadeOut(.5).then(() => {
         this.mplayer.audio.pause();
       });
     });
