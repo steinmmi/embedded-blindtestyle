@@ -1,16 +1,21 @@
 export class SongForm {
-    song: any;
-    constructor(
-        title: any,
-        artist: any,
-        year: any,
-        song: any,
-        type: any
-    ) {
-        this.song = song;
-    }
+    title: string;
+    artist: string;
+    year: string;
+    file: File;
+    type: string;
 
-    setSong(file) {
-        return this.song = file;
+    constructor(
+        title?: any,
+        artist?: any,
+        year?: any,
+        file?: any,
+        type?: any
+    ) {
+        this.title = title;
+        this.artist = artist;
+        this.year = year;
+        this.file = file;
+        this.type = type;
     }
 }

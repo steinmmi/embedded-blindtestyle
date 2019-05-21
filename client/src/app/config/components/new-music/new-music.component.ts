@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SongForm } from '../../song-form';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-music',
@@ -8,7 +9,7 @@ import { SongForm } from '../../song-form';
 })
 export class NewMusicComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
   types = [
     'Rock',
     'Pop',
@@ -18,17 +19,32 @@ export class NewMusicComponent implements OnInit {
     'Dessin animé'
   ];
 
-  music = new SongForm('', '', 2019, 'cc', null);
+  music = new SongForm();
 
   ngOnInit() {
   }
 
   add() {
-    console.log(this.music);
+    if(this.music.file === undefined || this.music.file === null ||
+      this.music.artist === undefined || this.music.artist.length === 0 ||
+      this.music.title === undefined || this.music.title.length === 0 ||
+      this.music.year === undefined || this.music.year.length === 0 ||
+      this.music.type === undefined || this.music.type.length === 0 ) {
+        return;
+      }
+    const formData = new FormData();
+    formData.append('file', this.music.file);
+    formData.append('artist', this.music.artist);
+    formData.append('title', this.music.title);
+    formData.append('year', this.music.year);
+    formData.append('type', this.music.type);
+
+    this.http.post('http://127.0.0.1:4201/song/add', formData).subscribe((val) => {
+      console.log(val);
+    });
   }
 
   onFileChange(event) {
-    this.music.setSong(event.target.files);
-    console.log(this.music);
+    this.music.file = event.target.files[0];
   }
 }

@@ -1,7 +1,17 @@
-const app = require('express')();
+const express = require('express')
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const log = require('./modules/log');
+const bodyParser = require('body-parser');
+const cors = require('cors')
+const fileUpload = require('express-fileupload')
+const MongoClient = require("mongodb").MongoClient;
+
+app.use(cors());
+app.use(fileUpload())
+app.use(express.json());
+
 error = false
 let names = [
     'Ornithorynque rassasié',
@@ -112,4 +122,21 @@ if (error) {
     return 0
 }
 http.listen(4201, "0.0.0.0");
+
+app.post('/song/add', function(req, res) {
+    res.send({})
+    console.log(req.files);
+    console.log(req.body);
+    MongoClient.connect("mongodb://localhost/", function(error, client) {
+    if (error) throw error;
+    db = client.db('blindtestyle')
+    db.collection("songs").insert(req.body, null, function (error, results) {
+    if (error) throw error;
+
+    console.log("Le document a bien été inséré");    
+});
+});
+})
+
 log.print('Server is now active');
+

@@ -10,7 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@types/socket.io": "^2.1.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-fileupload": "^1.1.4",
+    "mongodb": "^3.2.5",
     "socket.io": "^2.2.0"
   }
 }
