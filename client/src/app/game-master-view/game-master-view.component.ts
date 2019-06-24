@@ -9,9 +9,15 @@ import { Socket } from 'ngx-socket-io';
 export class GameMasterViewComponent implements OnInit {
 
   constructor(private socket: Socket) { }
-
+  title: string;
+  artist: string;
   ngOnInit() {
-
+    this.socket.fromEvent('music:next').subscribe((song: any) => {
+      console.log('oui');
+      
+      this.title = song.title;
+      this.artist = song.artist;
+    })
   }
 
   send(state) {

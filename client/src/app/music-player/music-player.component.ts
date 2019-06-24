@@ -18,6 +18,7 @@ export class MusicPlayerComponent implements OnInit {
   createAudio(src) {
     if (!this.audio) {
       this.audio = new Audio();
+      this.audio.volume = 0;
     }
     this.audio.src = src;
   }

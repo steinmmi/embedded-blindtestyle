@@ -4,6 +4,7 @@ import { Player } from '../player';
 import { SocketService } from '../socket.service';
 import { MusicPlayerComponent } from '../music-player/music-player.component';
 import { SplashScreenComponent } from '../splash-screen/splash-screen.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-screen-view',
@@ -15,9 +16,13 @@ export class ScreenViewComponent implements OnInit {
   @ViewChild(SplashScreenComponent) splashscreen: SplashScreenComponent;
   color: string;
   currentPlayer: Player;
+  win: boolean;
+  song: any;
   constructor(private socketService: SocketService) { }
 
   ngOnInit() {
+this.socketService.nextMusic();
+
     this.socketService.hasPushed().subscribe((player: Player) => {
       this.currentPlayer = player;
       this.mplayer.fadeOut(.5).then(() => {
@@ -25,17 +30,16 @@ export class ScreenViewComponent implements OnInit {
       });
     });
 
-    this.socketService.nextMusicSignal().subscribe(val => {
-      this.mplayer.audio.src = `/assets/music${val}.mp3`;
-      setTimeout(() => {
-        this.mplayer.fadeIn();
-      this.mplayer.playAudio();
+    this.socketService.nextMusicSignal().subscribe((song: any)  => {
+        this.mplayer.audio.src = `http://localhost:4201/song/get/${song._id}`;
+        this.win = false;
+        setTimeout(() => {
+          this.song = song;
+          this.mplayer.playAudio();
+          this.mplayer.fadeIn();
       }, 1000);
     });
 
-    setTimeout(() => {
-      this.mplayer.playAudio();
-    }, 1000);
     this.socketService.waitForAnswer().subscribe((data) => {
       this.currentPlayer = null;
 
@@ -43,12 +47,14 @@ export class ScreenViewComponent implements OnInit {
       answerAudio.src = data['correct'] ? '/assets/right_answer.mp3' : '/assets/wrong_answer.mp3';
       answerAudio.play();
       this.mplayer.fadeIn();
-      
+
       this.mplayer.audio.play();
       this.splashscreen.appear(data['correct'])
-      if (data) {
+      if (data['correct']) {
+        this.win = true;
         setTimeout(() => {
           this.mplayer.fadeOut().then(() => {
+            this.win = false;
             this.socketService.nextMusic();
           });
         }, 10000);
