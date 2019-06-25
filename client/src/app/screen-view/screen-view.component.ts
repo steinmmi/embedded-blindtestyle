@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
 import { Player } from '../player';
 import { SocketService } from '../socket.service';
 import { MusicPlayerComponent } from '../music-player/music-player.component';
 import { SplashScreenComponent } from '../splash-screen/splash-screen.component';
-import { HttpClient } from '@angular/common/http';
-
+import configFile from '../../assets/config.json';
 @Component({
   selector: 'app-screen-view',
   templateUrl: './screen-view.component.html',
@@ -31,7 +29,7 @@ this.socketService.nextMusic();
     });
 
     this.socketService.nextMusicSignal().subscribe((song: any)  => {
-        this.mplayer.audio.src = `http://localhost:4201/song/get/${song._id}`;
+        this.mplayer.audio.src = `${configFile.url}/song/get/${song._id}`;
         this.win = false;
         setTimeout(() => {
           this.song = song;
