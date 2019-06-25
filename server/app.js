@@ -5,7 +5,9 @@ const log = require("./modules/log");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const songRouter = require('./routers/song')
+const Model = require('./model');
 
+Model.connect();
 app.use(cors());
 app.use(fileUpload());
 app.use(express.json());
