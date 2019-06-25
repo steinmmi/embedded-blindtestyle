@@ -12,15 +12,14 @@ export class MusicPlayerComponent implements OnInit {
   constructor(private socketService: SocketService) { }
   audio: HTMLAudioElement;
   ngOnInit() {
-    this.createAudio('/assets/music1.mp3');
+    this.createAudio();
   }
 
-  createAudio(src) {
+  createAudio() {
     if (!this.audio) {
       this.audio = new Audio();
       this.audio.volume = 0;
     }
-    this.audio.src = src;
   }
 
   fadeOut(time = 1) {
