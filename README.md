@@ -19,3 +19,9 @@ While players uses their phones :
 I can't guarantee that this project will be someday finished, neither can I guarantee I will document all of it
 
 Feel free to use this code, but keep in mind that this is a personnal project that may not be easy to use for someone other than myself.
+
+
+## Deployment
+
+ 1. Clone project : `git clone https://github.com/steinmmi/embedded-blindtestyle`
+ 2. In `client/src/assets`, Modify `config.json.scl` with server IP adress and rename it to `config.json`
