@@ -25,6 +25,12 @@
         .music {
             width: 65%;
         }
+        .infos {
+            transition: all .5s;
+            &.hide {
+                opacity: 0;
+            }
+        }
     }
 }
 @keyframes blink {

@@ -5,9 +5,13 @@
         <app-score-board></app-score-board>
         </div>
         <div class="music">
-            <h1 *ngIf='currentPlayer'>C'est au tour de <em>{{currentPlayer.name}}</em></h1>
-        <app-music-player></app-music-player>
-        <app-splash-screen></app-splash-screen>
+            <h1 *ngIf="currentplayer" [ngClass]="{'hide': currentPlayer !== null}">C'est au tour de <em>{{currentPlayer.name}}</em></h1>
+            <div *ngIf="song" class='infos' [ngClass]="{'hide': !win}">
+                <h1>{{song.title}}</h1>
+                <h2>{{song.artist}}</h2>
+            </div>
+            <app-music-player></app-music-player>
+            <app-splash-screen></app-splash-screen>
     </div>
     </div>
 </div>
