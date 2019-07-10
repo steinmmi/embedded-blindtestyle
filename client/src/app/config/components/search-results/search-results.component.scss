@@ -1,0 +1,32 @@
+.result {
+    display: flex;
+    margin: 10px 0;
+    align-items: center;
+    padding: 1em;
+    background-color: #0001;
+    justify-content: space-between;
+    audio {
+        width: 100px;
+    }
+    .infos {
+        text-align: center;
+        width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            margin: 0 5px;
+        }
+    }
+    .big {
+        font-size: 18px;
+    }
+    .small {
+        font-size: 14px;
+    }
+    img {
+        width: 100px;
+        height: 100px;
+    }
+}

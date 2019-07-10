@@ -17,6 +17,7 @@ import { NewMusicComponent } from './config/components/new-music/new-music.compo
 import { GameMasterViewComponent } from './game-master-view/game-master-view.component';
 import { LandingComponent } from './landing/landing.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SearchResultsComponent } from './config/components/search-results/search-results.component';
 
 const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${window.location.pathname}`} };
 @NgModule({
@@ -31,6 +32,7 @@ const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${w
     NewMusicComponent,
     GameMasterViewComponent,
     LandingComponent,
+    SearchResultsComponent,
   ],
   imports: [
     HttpClientModule,
