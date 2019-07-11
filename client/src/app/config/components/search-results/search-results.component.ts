@@ -43,4 +43,8 @@ export class SearchResultsComponent implements OnInit {
   ngOnInit() {
   }
 
+  pauseAudios(ev) {
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => { if (audio !== ev.target) { audio.pause(); } });
+  }
 }

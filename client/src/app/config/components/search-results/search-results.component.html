@@ -5,6 +5,6 @@
       <span class="big">{{result.title}}</span> - <span class="small">{{result.artist.name}}</span>
     </div>
     <img *ngIf="result.cover" [src]="result.cover" alt="">
-    <audio *ngIf="result.preview" [src]="result.preview" controls></audio>
+    <audio (play)="pauseAudios($event)" *ngIf="result.preview" [src]="result.preview" controls></audio>
   </div>
 </div>
