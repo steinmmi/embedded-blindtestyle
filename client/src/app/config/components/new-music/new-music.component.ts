@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SongForm } from '../../song-form';
 import { HttpClient } from '@angular/common/http';
+import { DeezerService } from 'src/app/deezer.service';
 
 @Component({
   selector: 'app-new-music',
@@ -9,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class NewMusicComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private deezer: DeezerService) { }
   types = [
     'Rock',
     'Pop',
@@ -19,11 +20,37 @@ export class NewMusicComponent implements OnInit {
     'Dessin animé'
   ];
 
+  results = [];
+  changeTimeout: any;
   music = new SongForm();
 
   ngOnInit() {
   }
 
+  searchChange() {
+    const value = this.music.title;
+    if (this.changeTimeout) { clearTimeout(this.changeTimeout); }
+    this.changeTimeout = setTimeout(() => {
+      const newValue = value;
+      if (!newValue) {return; }
+      this.deezer.searchTrack(newValue).subscribe((val: Array<any>) => {
+        if (val) {
+          val.forEach((elem, index) => {
+            this.results[index] = {
+              title: elem.title,
+              artist: elem.artist,
+              preview: elem.preview,
+            };
+            this.deezer.getAlbumInfos(elem.album.id).subscribe((album: any) => {
+              this.results[index].cover = album.cover;
+              this.results[index].date = album.release_date;
+            });
+          });
+
+        }
+      });
+    }, 500);
+  }
   add() {
     if(this.music.file === undefined || this.music.file === null ||
       this.music.artist === undefined || this.music.artist.length === 0 ||
@@ -44,6 +71,11 @@ export class NewMusicComponent implements OnInit {
     });
   }
 
+  setForm(val) {
+    this.music.title = val.title;
+    this.music.artist = val.artist.name;
+    this.music.year = val.date.split('-')[0];
+  }
   onFileChange(event) {
     this.music.file = event.target.files[0];
   }

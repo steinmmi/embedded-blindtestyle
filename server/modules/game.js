@@ -25,14 +25,15 @@ Game.names = [
     "Bison futé",
     "Canard content",
     "Chiot timide",
-    "Aigle furieux"
+    "Aigle furieux",
+    "Cerf Volant"
 ];
 Game.screensocket;
 Game.players = [];
 Game.gm;
 Game.canAnswer = true;
 Game.actualPlayer;
-Game.colors = [ "blue", "green", "purple", "orange", 'cyan'];
+Game.colors = [ "blue", "green", "purple", "orange", 'cyan', '#519'];
 if (!(Game.colors.length === Game.names.length))
     throw new Error('Colors and names must have the same length')
 

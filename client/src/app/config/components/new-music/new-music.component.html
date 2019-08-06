@@ -3,7 +3,7 @@
   <h1>Add new track</h1>
     <div class="form-group">
       <label for="title">Titre</label>
-      <input type="text" class="form-group" name="title" id="title" required [(ngModel)]="music.title">
+      <input type="text" class="form-group" name="title" id="title" required (keyup)="searchChange()" [(ngModel)]="music.title">
     </div>
     <div class="form-group">
       <label for="artist">Artiste</label>
@@ -21,13 +21,14 @@
     </div>
     <div class="form-group">
       <label for="song">Fichier de la musique</label>
-      <input type="file" name="song" id="song" (change)="onFileChange($event)">
+      <input type="file" name="song" id="song" (change)="onFileChange($event)" accept=".mp3">
     </div>
 
     <div class="form-group">
       <input type="submit" value="Ajouter" (click)='add()'>
     </div>
   </div>
-    <app-search-results [query]='music.title'></app-search-results>
-  
+  <div>
+    <app-search-result *ngFor="let result of results" (click)='setForm(result)' [result]=result></app-search-result>
+  </div>
 </div>

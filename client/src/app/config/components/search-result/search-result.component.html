@@ -1,0 +1,8 @@
+<div class="result" [hidden]="!result.cover">
+    
+  <div class="infos">
+    <span class="big">{{result.title}}</span> - <span class="small">{{result.artist.name}}</span>
+  </div>
+  <img *ngIf="result.cover" [src]="result.cover" alt="">
+  <audio (play)="pauseAudios($event)" *ngIf="result.preview" [src]="result.preview" controls></audio>
+</div>
