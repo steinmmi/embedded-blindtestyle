@@ -13,11 +13,12 @@ import { SortPipe } from './sort.pipe';
 import configFile from '../assets/config.json';
 import { MusicPlayerComponent } from './music-player/music-player.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
-import { NewMusicComponent } from './config/components/new-music/new-music.component';
+import { NewMusicComponent } from './admin/config/components/new-music/new-music.component';
 import { GameMasterViewComponent } from './game-master-view/game-master-view.component';
 import { LandingComponent } from './landing/landing.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SearchResultComponent } from './config/components/search-result/search-result.component';
+import { SearchResultComponent } from './admin/config/components/search-result/search-result.component';
+import { HomeComponent } from './admin/home/home.component';
 
 const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${window.location.pathname}`} };
 @NgModule({
@@ -33,6 +34,7 @@ const config: SocketIoConfig = { url: configFile.url, options: {query: `path=${w
     GameMasterViewComponent,
     LandingComponent,
     SearchResultComponent,
+    HomeComponent,
   ],
   imports: [
     HttpClientModule,
