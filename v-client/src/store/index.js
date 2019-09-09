@@ -6,18 +6,19 @@ import actions from './actions'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-      playersList: [],
-      socket: {
-          isConnected: false
-      },
-      player: {
-          name: 'Mathieu',
-          score: 14,
-          color: 'red'
-      }
-  },
-  getters,
-  mutations,
-  actions,
+    config: {},
+    state: {
+        playersList: [],
+        socket: {
+            isConnected: false
+        },
+        player: {
+            name: 'Mathieu',
+            score: 14,
+            color: 'red'
+        }
+    },
+    getters,
+    mutations,
+    actions,
 })

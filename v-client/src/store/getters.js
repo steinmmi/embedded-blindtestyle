@@ -4,5 +4,8 @@ export default {
     },
     player: (state) => {
         return state.player;
+    },
+    config: (state) => {
+        return state.config;
     }
 }

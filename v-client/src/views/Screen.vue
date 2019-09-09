@@ -14,7 +14,6 @@
 
 <script>
 import Leaderboard from '../components/Leaderboard';
-import config from '../assets/config.json';
 
 export default {
     name: 'screen',
@@ -37,13 +36,18 @@ export default {
             switch (msg.type) {
                 case 'setMusic':
                     if (!msg.data) throw new Error('Audio src required in setMusic socket data, found : ' + msg.data)
-                    this.audio.src = `${config.url}/song/get/${msg.data}`
+                    this.audio.src = `${this.config.url}/song/get/${msg.data}`
                     // TODO: remove comment
                     // this.audio.play();
                     break;
             }
         }
     },
+    computed: {
+        config () {
+            return this.$store.getters.config
+        }
+    }
 }
 </script>
 

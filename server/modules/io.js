@@ -198,7 +198,7 @@ function newPlayer(socket) {
     }));
     socket.send(JSON.stringify(
         {
-            mutation: 'setConfig',
+            mutation: 'setPlayers',
             players: Game.players
         }
     ))

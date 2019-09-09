@@ -4,10 +4,15 @@ import store from './store/'
 import router from './router'
 import VueNativeSock from 'vue-native-websocket'
 
-Vue.config.productionTip = false
-Vue.use(VueNativeSock, 'ws://localhost:9700/', {store: store, format: 'json'})
-new Vue({
-  store,
-  router,
-  render: h => h(App)
-}).$mount('#app')
+fetch('/config.json').then(res => res.json()).then(config => {
+    store.state.config = config;
+    
+    Vue.config.productionTip = false
+    Vue.use(VueNativeSock, config.ws, {store: store, format: 'json'})
+
+    new Vue({
+    store,
+    router,
+    render: h => h(App)
+    }).$mount('#app')
+});
