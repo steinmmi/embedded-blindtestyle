@@ -33,7 +33,7 @@ Game.players = [];
 Game.gm;
 Game.canAnswer = true;
 Game.actualPlayer;
-Game.colors = [ "blue", "green", "purple", "orange", 'cyan', '#519'];
+Game.colors = [ "#232355", "#882244", "#451200", "#931267", '#229944', '#501090'];
 if (!(Game.colors.length === Game.names.length))
     throw new Error('Colors and names must have the same length')
 

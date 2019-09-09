@@ -1,12 +1,34 @@
 const log = require("./log");
 const Game = require('./game')
 const Model = require('../model')
-module.exports = http => {
-    const io = require("socket.io")(http);
-    io.on("connection", socket => {
-        let path = socket.handshake.query.path;
-        log.print(`${socket.handshake.address} connected | path : ${path}`);
-        if (path == "/play" || path == "/gm") {
+const Websocket = require('ws');
+const url = require('url')
+
+let screenSocket;
+module.exports = () => {
+    io = new Websocket.Server({
+        port: '9700'
+    });
+
+    io.on("connection", (socket,req) => {
+        socket.on('message', (msg) => {
+            msg = JSON.parse(msg)
+            
+            switch(msg.type) {
+                case 'setRole':
+                    if(msg.data === 'screen')
+                        setScreen(socket)
+                    else newPlayer(socket);
+                    break;
+                case 'pushedButton':
+                    console.log(socket.player);
+                    
+            }
+        })        
+        
+        /* let path = socket.handshake.query.path;
+        log.print(`${socket.handshake.address} connected | path : ${path}`); */
+        /* if (path == "/play" || path == "/gm") {
             socket.player = {
                 name: Game.getName(),
                 score: 0,
@@ -120,7 +142,8 @@ module.exports = http => {
             Game.screenSocket = socket;
         }
         socket.emit("user_list", Game.players);
-    });
+        */
+    }); 
 };
 
 function findByName({name}) {
@@ -134,4 +157,70 @@ function findByName({name}) {
         i++;
     } while (i < Game.players.length && !find);
     return find ? i - 1 : -1;
+}
+
+function broadcastAll(wss, data) {
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === Websocket.OPEN) {
+          client.send(data);
+        }
+      });
+}
+
+function broadcast(wss, ws, data) {
+    wss.clients.forEach(function each(client) {
+        if (client !== ws && client.readyState === Websocket.OPEN) {
+          client.send(data);
+        }
+      });
+}
+
+function newPlayer(socket) {
+    socket.player = {
+        name: Game.getName(),
+        score: 0,
+        color: Game.getColor(),
+        id: socket.id
+    };
+    log.print(
+        `New player is now ${log.colors.Bright +
+            socket.player.name +
+            log.colors.Reset}`
+    );
+    
+    socket.send(JSON.stringify({
+        mutation: 'setPlayer',
+        player: socket.player
+    }))
+    broadcastAll(io, JSON.stringify({
+        mutation: 'addPlayer',
+        player: socket.player
+    }));
+    socket.send(JSON.stringify(
+        {
+            mutation: 'setConfig',
+            players: Game.players
+        }
+    ))
+    Game.addPlayer(socket.player)
+}
+
+function setScreen(socket) {
+    screenSocket = socket;
+    socket.send(JSON.stringify(
+        {
+            mutation: 'setConfig',
+            players: Game.players
+        }
+    ))
+    Model.songs.getRandom().then(song => {
+        log.info("Playing music : " + song.title);
+        
+        socket.send(JSON.stringify({
+            type: 'setMusic',
+            data: song._id
+        }))
+        Game.canAnswer = true;
+    });
+    
 }
