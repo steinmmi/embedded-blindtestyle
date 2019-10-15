@@ -33,8 +33,5 @@ export default {
     },
     addPlayer: (state, datas) => {
         state.playersList.push(datas.player)
-    },
-    setConfig: (state, datas) => {
-        state.config = datas;
     }
 }

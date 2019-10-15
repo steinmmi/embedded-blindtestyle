@@ -209,7 +209,7 @@ function setScreen(socket) {
     screenSocket = socket;
     socket.send(JSON.stringify(
         {
-            mutation: 'setConfig',
+            mutation: 'setPlayers',
             players: Game.players
         }
     ))
