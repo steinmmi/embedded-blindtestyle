@@ -33,5 +33,14 @@ export default {
     },
     addPlayer: (state, datas) => {
         state.playersList.push(datas.player)
+    },
+    setConfig: (state, datas) => {
+        state.config = datas;
+    },
+    setCurrentSong: (state, datas) => {
+        state.currentSong = datas.song;
+    },
+    setPlayingState: (state, datas) => {
+        state.isPlaying = datas.playing
     }
 }

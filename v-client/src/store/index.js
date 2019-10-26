@@ -16,7 +16,9 @@ export default new Vuex.Store({
             name: 'Mathieu',
             score: 14,
             color: 'red'
-        }
+        },
+        currentSong: {},
+        isPlaying: true
     },
     getters,
     mutations,

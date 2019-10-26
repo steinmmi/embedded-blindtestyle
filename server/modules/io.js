@@ -4,16 +4,16 @@ const Model = require('../model')
 const Websocket = require('ws');
 const url = require('url')
 
+let io;
 let screenSocket;
 module.exports = () => {
     io = new Websocket.Server({
         port: '9700'
     });
 
-    io.on("connection", (socket,req) => {
+    io.on("connection", (socket) => {
         socket.on('message', (msg) => {
             msg = JSON.parse(msg)
-            
             switch(msg.type) {
                 case 'setRole':
                     if(msg.data === 'screen')
@@ -216,10 +216,11 @@ function setScreen(socket) {
     Model.songs.getRandom().then(song => {
         log.info("Playing music : " + song.title);
         
-        socket.send(JSON.stringify({
-            type: 'setMusic',
-            data: song._id
+        broadcastAll(io, JSON.stringify({
+            mutation: 'setCurrentSong',
+            song: song
         }))
+        
         Game.canAnswer = true;
     });
     

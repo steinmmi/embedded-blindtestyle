@@ -7,5 +7,11 @@ export default {
     },
     config: (state) => {
         return state.config;
+    },
+    currentSong: (state) => {
+        return state.currentSong
+    },
+    isPlaying: (state) => {
+        return state.isPlaying
     }
 }

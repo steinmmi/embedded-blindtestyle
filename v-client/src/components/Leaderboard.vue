@@ -12,7 +12,6 @@
                     <span class="player-score">
                         {{ player.score }}
                     </span>
-                    
                 </div>
             </div>
         </div>
@@ -71,7 +70,6 @@ h1 {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin: 5px;
 }
 .player > * {
     margin: 0 5px;
