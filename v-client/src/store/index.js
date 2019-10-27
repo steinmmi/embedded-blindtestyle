@@ -17,6 +17,7 @@ export default new Vuex.Store({
             score: 14,
             color: 'red'
         },
+        currentPlayer: null,
         currentSong: {},
         isPlaying: true
     },

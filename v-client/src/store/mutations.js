@@ -37,10 +37,21 @@ export default {
     setConfig: (state, datas) => {
         state.config = datas;
     },
+    removePlayer: (state, datas) => {
+        let index = state.playersList.indexOf(datas.player)
+        state.playersList.forEach((el, index) => {
+            if(el.name === datas.player.name) state.playersList.splice(index,1)
+        })
+    },
     setCurrentSong: (state, datas) => {
         state.currentSong = datas.song;
     },
     setPlayingState: (state, datas) => {
         state.isPlaying = datas.playing
+    },
+    setCurrentPlayer: (state, datas) => {
+        state.currentPlayer = datas.player
+        console.log(state.currentPlayer);
+        
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :style="{color: currentPlayer ? currentPlayer.color : null}">
       <div class="left">
             <div class="leaderboardContainer">
                 <leaderboard></leaderboard>
@@ -7,6 +7,7 @@
       </div>
       <div class="right">
           <h1>Blindtestylé</h1>
+          <p v-if="currentPlayer">Au tour de {{currentPlayer.name}}</p>
           <div v-if="currentSong && !isPlaying" class="song">
               <h2 class="title">{{currentSong.title}}</h2>
               <h3 class="artist">{{currentSong.artist}}</h3>
@@ -69,6 +70,9 @@ export default {
         },
         isPlaying () {
             return this.$store.getters.isPlaying
+        },
+        currentPlayer () {
+            return this.$store.getters.currentPlayer
         }
     }
 }
@@ -78,6 +82,11 @@ export default {
 .container {
     display: flex;
     height: 100%;
+    animation: blink 1.2s infinite;
+    color: red;
+}
+.container > * {
+    color: white;
 }
 .left {
     width: 40%;
@@ -95,5 +104,20 @@ export default {
     text-align: center;
     border-radius: 10px;
     box-shadow: 0px 0px 5px inset #2A2A2A;
+}
+
+@keyframes blink {
+    0% {
+        box-shadow: 2px 2px 5px inset, -2px -2px 5px inset;
+    }
+    50% {
+        box-shadow: 20px 20px 25px inset, -20px -20px 25px inset;
+    }
+    80% {
+        box-shadow: 20px 20px 25px inset, -20px -20px 25px inset;
+    }
+    100% {
+        box-shadow: 2px 2px 5px inset, -2px -2px 5px inset;
+    }
 }
 </style>

@@ -1,6 +1,16 @@
+let Log = require('./log')
 class Game {
     static addPlayer(player) {
         Game.players.push(player);
+    }
+
+    static generatePlayer(socket) {
+        return {
+            name: Game.getName(),
+            score: 0,
+            color: Game.getColor(),
+            id: socket.id
+        };
     }
 
     static getName() {
@@ -17,6 +27,16 @@ class Game {
 
     static addName(name) {
         Game.names.push(name)
+    }
+    static removePlayer(player) {
+        let id = Game.players.indexOf(player)
+        if(id !== -1) {
+            Game.players.splice(id,1)
+            return true
+        }
+        else {
+        Log.error('Cannot remove player ' + player)
+        }
     }
 }
 

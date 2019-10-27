@@ -12,6 +12,23 @@ module.exports = () => {
     });
 
     io.on("connection", (socket) => {
+        socket.on('close', () => {
+            if(!socket.player) return;
+            Game.removePlayer(socket.player);
+            log.warn(
+                `${log.colors.Bright +
+                    (socket.player.name || socket.handshake.address) +
+                    log.colors.Reset} disconnected`
+            );
+            if(socket.player == Game.gm)
+                Game.gm = null;
+            Game.addColor(socket.player.color);
+            Game.addName(socket.player.name);
+            broadcastAll(io, JSON.stringify({
+                mutation: 'removePlayer',
+                player: socket.player
+            }));
+        })
         socket.on('message', (msg) => {
             msg = JSON.parse(msg)
             switch(msg.type) {
@@ -21,8 +38,13 @@ module.exports = () => {
                     else newPlayer(socket);
                     break;
                 case 'pushedButton':
-                    console.log(socket.player);
-                    
+                    broadcastAll(io, JSON.stringify({
+                        mutation: 'setCurrentPlayer',
+                        player: socket.player
+                    }))
+                    break;
+                default:
+                    log.error('Unhandled message : ' + msg)
             }
         })        
         
@@ -176,12 +198,7 @@ function broadcast(wss, ws, data) {
 }
 
 function newPlayer(socket) {
-    socket.player = {
-        name: Game.getName(),
-        score: 0,
-        color: Game.getColor(),
-        id: socket.id
-    };
+    socket.player = Game.generatePlayer(socket);
     log.print(
         `New player is now ${log.colors.Bright +
             socket.player.name +

@@ -13,5 +13,8 @@ export default {
     },
     isPlaying: (state) => {
         return state.isPlaying
+    },
+    currentPlayer: (state) => {
+        return state.currentPlayer
     }
 }
