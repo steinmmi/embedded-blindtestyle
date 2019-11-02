@@ -38,6 +38,12 @@ class Game {
         Log.error('Cannot remove player ' + player)
         }
     }
+    static set screensocket(n) {
+        Game._screensocket = n
+    }
+    static get screensocket() {
+        return Game._screensocket
+    }
 }
 
 Game.names = [

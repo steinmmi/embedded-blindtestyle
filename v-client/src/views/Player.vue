@@ -6,7 +6,7 @@
       </div>
       <div class="bottom">
           <div class="button-container">
-              <div class="button" @click="test()" :style="{backgroundColor: player.color}"></div>
+              <div class="button" @click="push()" :style="{backgroundColor: player.color}"></div>
           </div>
           
       </div>
@@ -24,7 +24,7 @@ export default {
         }
     },
     methods: {
-        test() {
+        push() {
             this.$socket.sendObj({type:'pushedButton'})
         }
     },

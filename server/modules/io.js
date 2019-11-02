@@ -37,11 +37,47 @@ module.exports = () => {
                         setScreen(socket)
                     else newPlayer(socket);
                     break;
+                case 'getSong':
+                    broadcastAll(io, JSON.stringify( {
+                        mutation: 'setPlayingState',
+                        isPlaying: true
+                    }))
+                    sendNewMusic()
+                    break;
                 case 'pushedButton':
+                    if(Game.actualPlayer) return;
+                    Game.actualPlayer = socket.player
                     broadcastAll(io, JSON.stringify({
                         mutation: 'setCurrentPlayer',
                         player: socket.player
                     }))
+                    break;
+                case 'setResponse':
+                    if(!Game.actualPlayer) return;
+                    if(msg.data === 'correct') {
+                        log.info('Gamemaster pushed green button')
+                        Game.players[findByName(Game.actualPlayer)]['score']++;
+                        broadcastAll(io, JSON.stringify(
+                            {
+                                mutation: 'addScore',
+                                player: Game.actualPlayer,
+                                score: 1
+                            }
+                        ))
+                        broadcastAll(io, JSON.stringify( {
+                            mutation: 'setPlayingState',
+                            isPlaying: false
+                        }))
+                        broadcastAll(io, JSON.stringify({
+                            mutation: 'setCurrentPlayer',
+                            player: null
+                        }))
+                        Game.actualPlayer = undefined;
+                    } else if(msg.data === 'incorrect') {
+                        log.info('Gamemaster pushed red button')
+                    } else {
+                        log.error('Unhandled response type :' + msg)
+                    }
                     break;
                 default:
                     log.error('Unhandled message : ' + msg)
@@ -223,13 +259,17 @@ function newPlayer(socket) {
 }
 
 function setScreen(socket) {
-    screenSocket = socket;
+    Game.screensocket = socket
     socket.send(JSON.stringify(
         {
             mutation: 'setPlayers',
             players: Game.players
         }
     ))
+    sendNewMusic()
+}
+
+function sendNewMusic() {
     Model.songs.getRandom().then(song => {
         log.info("Playing music : " + song.title);
         
@@ -240,5 +280,4 @@ function setScreen(socket) {
         
         Game.canAnswer = true;
     });
-    
 }

@@ -10,8 +10,8 @@
               <h3 class="artist">{{currentSong.artist}}</h3>
           </div>
           <div class="buttons-container">
-              <div class="button green"></div>
-              <div class="button red"></div>
+              <div class="button green" @click="pushGreen()"></div>
+              <div class="button red" @click="pushRed()"></div>
           </div>
           
       </div>
@@ -29,8 +29,16 @@ export default {
         },
         currentSong () {
             return this.$store.getters.currentSong
-        },
+        }
     },
+    methods: {
+        pushRed() {
+            this.$socket.sendObj({type:'setResponse', data: 'incorrect'})
+        },
+        pushGreen() {
+            this.$socket.sendObj({type:'setResponse', data: 'correct'})
+        }
+    }
 }
 </script>
 

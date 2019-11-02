@@ -47,11 +47,17 @@ export default {
         state.currentSong = datas.song;
     },
     setPlayingState: (state, datas) => {
-        state.isPlaying = datas.playing
+        state.isPlaying = datas.isPlaying
     },
     setCurrentPlayer: (state, datas) => {
-        state.currentPlayer = datas.player
-        console.log(state.currentPlayer);
+        state.currentPlayer = datas.player   
+    },
+    addScore: (state, datas) => {
+        for (let player of state.playersList) {
+            if(datas.player.name === player.name)
+                player.score+= datas.score || 1;
+        };
+        
         
     }
 }

@@ -1,5 +1,7 @@
 <template>
-  <div class="container" :style="{color: currentPlayer ? currentPlayer.color : null}">
+  <div class="container"
+    :class="{anim: currentPlayer}"
+    :style="{color: currentPlayer ? currentPlayer.color : null}">
       <div class="left">
             <div class="leaderboardContainer">
                 <leaderboard></leaderboard>
@@ -30,8 +32,6 @@ export default {
     },
     mounted() {
         this.audio.addEventListener('canplay', () => {
-            console.log('dqsd');
-            
         })
         this.$options.sockets.onmessage = (socket_message) => {
             let socket_json = JSON.parse(socket_message.data)
@@ -44,8 +44,6 @@ export default {
         socketHandler(msg) {
             switch (msg.type) {
                 case 'setMusic':
-                    console.log(`${this.config.url}/song/get/${msg.data}`);
-                    
                     if (!msg.data) throw new Error('Audio src required in setMusic socket data, found : ' + msg.data)
                     this.audio.src = `${this.config.url}/song/get/${msg.data}`
                     this.audio.id = 'test';
@@ -53,12 +51,43 @@ export default {
                     this.audio.play();
                     break;
             }
+        },
+        fade(volume, VOLCHANGE = .1, MILLIS = 200) {
+            try {
+                if(this.audio.volume > volume) {
+                    this.audio.volume -= VOLCHANGE
+                    setTimeout(() => {
+                        this.fade(volume)
+                    }, MILLIS)
+                } else if (this.audio.volume < volume) {
+                    this.audio.volume += VOLCHANGE
+                    setTimeout(() => {
+                        this.fade(volume)
+                    }, MILLIS)
+                } else {
+                    if(this.audio.volume == 0) this.audio.pause();
+                }
+            } catch {
+                
+            }
         }
     },
     watch: {
         currentSong () {
             this.audio.src = `${this.config.url}/song/get/${this.currentSong._id}`
             this.audio.play();
+        },
+        currentPlayer (val) {
+            if(val) {
+                this.fade(0, .2, 10)
+            } else {
+                this.audio.play();
+                this.fade(1)
+                setTimeout(() => {
+                    this.$socket.sendObj({type: 'getSong'})
+                },5000)
+            }
+            
         }
     },
     computed: {
@@ -82,8 +111,9 @@ export default {
 .container {
     display: flex;
     height: 100%;
+}
+.container.anim {
     animation: blink 1.2s infinite;
-    color: red;
 }
 .container > * {
     color: white;
