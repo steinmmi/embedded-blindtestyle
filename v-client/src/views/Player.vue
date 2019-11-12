@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+      <img src="@/assets/fullscreen.png" class="fullscreen" @click="goFullScreen()" v-if="!isFullScreen">
       <div class="top">
           <h1>Vous êtes {{player.name}}</h1>
           <leaderboard></leaderboard>
@@ -18,14 +19,27 @@ import Leaderboard from '../components/Leaderboard'
 export default {
     name: 'player',
     components: {Leaderboard},
+    data () {
+        return {
+            isFullScreen: false
+        }
+    },
     computed: {
         player () {
             return this.$store.getters.player;
         }
     },
+    mounted () {
+        document.onfullscreenchange = (val) => {
+            this.isFullScreen = !this.isFullScreen;
+        }
+    },
     methods: {
         push() {
             this.$socket.sendObj({type:'pushedButton'})
+        },
+        goFullScreen() {
+            document.documentElement.requestFullscreen()
         }
     },
 }
@@ -61,5 +75,13 @@ h1 {
     height: 200px;
     border-radius: 50%;
     background-color: red;
+}
+.fullscreen {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    max-width: 10%;
+    height: auto;
 }
 </style>

@@ -12,6 +12,8 @@ export default new Vuex.Store({
         socket: {
             isConnected: false
         },
+        responseState: null,
+        route: null,
         player: {
             name: 'Mathieu',
             score: 14,

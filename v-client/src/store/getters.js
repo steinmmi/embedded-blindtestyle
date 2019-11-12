@@ -16,5 +16,11 @@ export default {
     },
     currentPlayer: (state) => {
         return state.currentPlayer
+    },
+    getRoute: (state) => {
+        return state.route
+    },
+    responseState: (state) => {
+        return state.responseState
     }
 }

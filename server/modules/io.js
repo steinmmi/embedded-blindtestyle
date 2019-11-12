@@ -4,6 +4,7 @@ const Model = require('../model')
 const Websocket = require('ws');
 const url = require('url')
 
+const CLIENTS = []
 let io;
 let screenSocket;
 module.exports = () => {
@@ -12,16 +13,18 @@ module.exports = () => {
     });
 
     io.on("connection", (socket) => {
+        CLIENTS.push(socket)
         socket.on('close', () => {
             if(!socket.player) return;
             Game.removePlayer(socket.player);
+            
             log.warn(
                 `${log.colors.Bright +
                     (socket.player.name || socket.handshake.address) +
                     log.colors.Reset} disconnected`
             );
             if(socket.player == Game.gm)
-                Game.gm = null;
+                Game.gm = undefined;
             Game.addColor(socket.player.color);
             Game.addName(socket.player.name);
             broadcastAll(io, JSON.stringify({
@@ -38,6 +41,7 @@ module.exports = () => {
                     else newPlayer(socket);
                     break;
                 case 'getSong':
+                    Game.canAnswer = true;
                     broadcastAll(io, JSON.stringify( {
                         mutation: 'setPlayingState',
                         isPlaying: true
@@ -45,7 +49,8 @@ module.exports = () => {
                     sendNewMusic()
                     break;
                 case 'pushedButton':
-                    if(Game.actualPlayer) return;
+                    if(Game.actualPlayer || !Game.canAnswer) return;
+                    Game.canAnswer = false;
                     Game.actualPlayer = socket.player
                     broadcastAll(io, JSON.stringify({
                         mutation: 'setCurrentPlayer',
@@ -72,9 +77,28 @@ module.exports = () => {
                             mutation: 'setCurrentPlayer',
                             player: null
                         }))
+                        broadcastAll(io, JSON.stringify({
+                            mutation: 'setResponse',
+                            response: 'correct'
+                        }))
+                        Game.changeTurn(io)
                         Game.actualPlayer = undefined;
                     } else if(msg.data === 'incorrect') {
+                        Game.canAnswer = true;
                         log.info('Gamemaster pushed red button')
+                        broadcastAll(io, JSON.stringify({
+                            mutation: 'setResponse',
+                            response: 'incorrect'
+                        }))
+                        broadcastAll(io, JSON.stringify({
+                            mutation: 'setCurrentPlayer',
+                            player: null
+                        }))
+                        broadcastAll(io, JSON.stringify({
+                            mutation: 'setResponse',
+                            response: 'incorrect'
+                        }))
+                        Game.actualPlayer = undefined;
                     } else {
                         log.error('Unhandled response type :' + msg)
                     }
@@ -235,6 +259,19 @@ function broadcast(wss, ws, data) {
 
 function newPlayer(socket) {
     socket.player = Game.generatePlayer(socket);
+    if(Game.gm === undefined) {
+        Game.gm = socket.player
+        socket.send(JSON.stringify({
+            mutation: 'setRoute',
+            route: 'gamemaster'
+        }))
+    }
+    else {
+        socket.send(JSON.stringify({
+            mutation: 'setRoute',
+            route: 'play'
+        }))
+    }
     log.print(
         `New player is now ${log.colors.Bright +
             socket.player.name +
@@ -266,7 +303,6 @@ function setScreen(socket) {
             players: Game.players
         }
     ))
-    sendNewMusic()
 }
 
 function sendNewMusic() {

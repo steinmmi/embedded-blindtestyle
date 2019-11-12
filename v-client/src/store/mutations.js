@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import router from 'vue-router'
 /* eslint-disable no-console*/
 export default {
     SOCKET_ONOPEN (state, event)  {
@@ -59,5 +60,11 @@ export default {
         };
         
         
+    },
+    setRoute: (state, datas ) => {
+        state.route = datas.route
+    },
+    setResponse: (state, datas) => {
+        state.responseState = datas.response
     }
 }

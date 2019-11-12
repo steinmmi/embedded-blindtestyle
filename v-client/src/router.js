@@ -4,6 +4,8 @@ import Home from './views/Home.vue'
 import Screen from './views/Screen.vue'
 import Player from './views/Player.vue'
 import Gamemaster from './views/Gamemaster.vue'
+import AddMusc from './views/AddMusic.vue'
+import viewMusics from './views/ViewMusics.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -24,9 +26,19 @@ export default new Router({
         component: Player
     },
     {
+      path: '/musics',
+      name: 'musics',
+      component: viewMusics
+  },
+    {
       path: '/gamemaster',
       name: 'gamemaster',
       component: Gamemaster
+  },
+  {
+    path: '/addMusic',
+    name: 'addMusic',
+    component: AddMusc
   }
   ]
 })

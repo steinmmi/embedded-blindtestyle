@@ -19,11 +19,25 @@ model = {
         });
     },
     songs: {
-        getRandom: () => {
+        getAll: () => {
             return new Promise((resolve, reject) => {
-                db.collection("songs").aggregate([ { $sample: { size: 1 } } ]).toArray((err, doc) => {
+                db.collection("songs").find().toArray((err, doc) => {
                     if(err) reject(err);
-                    resolve(doc[0]);
+                    resolve(doc)
+                })
+            })
+        },
+        getRandom: () => {
+            // db.songs.update({"played": true}, {$set: {played: false}})
+            return new Promise((resolve, reject) => {
+                db.collection("songs").aggregate([ {$match: {"played": false} }, {$sample: {size: 1}} ]).toArray((err, doc) => {
+                    if(err) reject(err);
+                    console.log(doc[0]);
+                    resolve(doc[0])
+                    db.collection("songs").updateOne({_id: doc[0]._id}, {$set: {"played": true}}, (err, res) => {
+                        if(err) reject(err);
+                        resolve(doc[0]);
+                    })
                 });
             });
         },

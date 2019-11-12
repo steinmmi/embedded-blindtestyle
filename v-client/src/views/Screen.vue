@@ -1,7 +1,9 @@
 <template>
-  <div class="container"
+  <div class="container" @click="start()"
     :class="{anim: currentPlayer}"
     :style="{color: currentPlayer ? currentPlayer.color : null}">
+    <div class="correct" :class="{show: responseState === 'correct'}"><img src="@/assets/check.png" alt=""></div>
+    <div class="incorrect" :class="{show: responseState === 'incorrect'}"><img src="@/assets/cross.png" alt=""></div>
       <div class="left">
             <div class="leaderboardContainer">
                 <leaderboard></leaderboard>
@@ -9,11 +11,13 @@
       </div>
       <div class="right">
           <h1>Blindtestylé</h1>
-          <p v-if="currentPlayer">Au tour de {{currentPlayer.name}}</p>
+          <h2 v-if="currentPlayer">{{currentPlayer.name}}</h2>
           <div v-if="currentSong && !isPlaying" class="song">
               <h2 class="title">{{currentSong.title}}</h2>
               <h3 class="artist">{{currentSong.artist}}</h3>
+              <img :src="currentSong.cover" height="200" alt="">
           </div>
+          <button v-if="showBtn" @click="start()">START</button>
       </div>
       
   </div>
@@ -27,31 +31,12 @@ export default {
     components: {Leaderboard},
     data () {
         return {
-            audio: new Audio('')
-        }
-    },
-    mounted() {
-        this.audio.addEventListener('canplay', () => {
-        })
-        this.$options.sockets.onmessage = (socket_message) => {
-            let socket_json = JSON.parse(socket_message.data)
-            if(socket_json.type) {
-                this.socketHandler(socket_json)
-            }
+            audio: new Audio(''),
+            notifAudio: new Audio(''),
+            showBtn: true
         }
     },
     methods: {
-        socketHandler(msg) {
-            switch (msg.type) {
-                case 'setMusic':
-                    if (!msg.data) throw new Error('Audio src required in setMusic socket data, found : ' + msg.data)
-                    this.audio.src = `${this.config.url}/song/get/${msg.data}`
-                    this.audio.id = 'test';
-                    // TODO: remove comment
-                    this.audio.play();
-                    break;
-            }
-        },
         fade(volume, VOLCHANGE = .1, MILLIS = 200) {
             try {
                 if(this.audio.volume > volume) {
@@ -70,24 +55,35 @@ export default {
             } catch {
                 
             }
+        },
+        start() {
+            if(!this.showBtn)return;
+            this.$socket.sendObj({type: 'getSong'})
+            this.showBtn = false
         }
     },
     watch: {
+        responseState (val) {
+            if(val === 'correct' || val === 'incorrect') {
+                this.audio.play();
+                if(val === 'correct') {
+                    setTimeout(() => {
+                    this.$socket.sendObj({type: 'getSong'})
+                    },15000)
+                }
+                this.notifAudio.src = require(`@/assets/${val}.mp3`)
+                this.notifAudio.play()
+                setTimeout(() => {
+                    this.$store.commit('setResponse', {response: null})
+                },1000)
+            }
+        },
         currentSong () {
             this.audio.src = `${this.config.url}/song/get/${this.currentSong._id}`
             this.audio.play();
         },
         currentPlayer (val) {
-            if(val) {
-                this.fade(0, .2, 10)
-            } else {
-                this.audio.play();
-                this.fade(1)
-                setTimeout(() => {
-                    this.$socket.sendObj({type: 'getSong'})
-                },5000)
-            }
-            
+            if(val) this.audio.pause()
         }
     },
     computed: {
@@ -102,6 +98,14 @@ export default {
         },
         currentPlayer () {
             return this.$store.getters.currentPlayer
+        },
+        responseState () {
+            return this.$store.getters.responseState
+        }
+    },
+    mounted () {
+        this.audio.onended = () => {
+            this.$socket.sendObj({type: 'getSong'})
         }
     }
 }
@@ -113,7 +117,8 @@ export default {
     height: 100%;
 }
 .container.anim {
-    animation: blink 1.2s infinite;
+    box-shadow: inset 50px 50px 50px, inset -50px -50px 50px;
+    z-index: 50;
 }
 .container > * {
     color: white;
@@ -138,16 +143,35 @@ export default {
 
 @keyframes blink {
     0% {
-        box-shadow: 2px 2px 5px inset, -2px -2px 5px inset;
+        box-shadow: none;
     }
     50% {
-        box-shadow: 20px 20px 25px inset, -20px -20px 25px inset;
+        box-shadow: 20px 20px 250px inset, -20px -20px 250px inset;
     }
     80% {
-        box-shadow: 20px 20px 25px inset, -20px -20px 25px inset;
+        box-shadow: 20px 20px 250px inset, -20px -20px 250px inset;
     }
     100% {
-        box-shadow: 2px 2px 5px inset, -2px -2px 5px inset;
+        box-shadow: none
     }
+}
+.correct, .incorrect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all .5s ease-in-out;
+}
+.correct img, .incorrect img{
+    position: absolute;
+    height: 70%;
+    width: auto;
+}
+
+.correct.show, .incorrect.show {
+    opacity: 1;
 }
 </style>

@@ -12,6 +12,11 @@ router.post("/add", function(req, res) {
     })
 });
 
+router.get('/getAll', (req, res) => {
+    Model.songs.getAll().then(val => {
+        res.send(JSON.stringify(val))
+    })
+})
 router.get('/get/:id', (req, res) => {
     let path = `./songs/${req.params.id}.mp3`;
     try {

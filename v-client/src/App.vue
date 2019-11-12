@@ -10,12 +10,21 @@ export default {
         if(this.$route.name === 'screen') {
             this.$socket.sendObj({type: 'setRole', data: 'screen'})
         }
-        else this.$socket.sendObj({type: 'setRole', data: 'test'})
+        else if (this.$route.name === 'addMusic' || this.$route.name === 'musics') {
         }
-
-        
-        
+        else this.$socket.sendObj({type: 'setRole', data: 'test'})
+        }  
     },
+    watch: {
+        getRoute (val) {
+            this.$router.push(val)
+        }
+    },
+    computed: {
+        getRoute () {
+            return this.$store.getters.getRoute;
+        }
+    }
 }
 </script>
 <style>
