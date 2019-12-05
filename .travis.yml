@@ -7,3 +7,4 @@ cache:
 script:
   - cd v-client
   - npm install
+  - npm run build
