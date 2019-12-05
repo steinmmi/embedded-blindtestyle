@@ -6,4 +6,5 @@ cache:
     - node_modules
 script:
   - cd v-client
+  - npm install
   - npm run build
